@@ -391,5 +391,17 @@ function meshport.get_asset_paths(assetFolderName, extension)
 		end
 	end
 
+	-- Temporary FIX: can't find another games textures
+	-- Some block models don't work, it must be fixed too
+	local gameName = minetest.get_game_info().id
+	local gameAssetPath = minetest.get_game_info().path .. "/" .. assetFolderName
+	-- Iterate through all the files in the requested folder of the mod.
+	for _, fileName in ipairs(minetest.get_dir_list(gameAssetPath, false)) do
+		-- Add files to the table. If an extension is specified, only add files with that extension.
+		if not extension or string.lower(string.sub(fileName, -string.len(extension))) == extension then
+			assets[fileName] = gameAssetPath .. "/" .. fileName
+		end
+	end
+
 	return assets
 end
